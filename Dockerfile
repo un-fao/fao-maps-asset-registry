@@ -1,30 +1,24 @@
 # Use official Python image based on Ubuntu
-FROM python:3.9
+FROM python:3.11-slim
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    g++ \
+    gcc \
+    libgdal-dev \
+    python3-dev \
+    && apt-get clean
 
 # Set environment variables for GDAL
 ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
 ENV C_INCLUDE_PATH=/usr/include/gdal
 
-# Install GDAL and dependencies
-RUN apt-get update && apt-get install -y \
-    gdal-bin \
-    libpq-dev \
-    libgdal-dev \
-    python3-gdal \
-    && rm -rf /var/lib/apt/lists/*
-
-# Set working directory
-WORKDIR /app
-
-# Copy requirements and install
+# Install Python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy project files
-COPY . .
+# Copy application code
+COPY . /app
+WORKDIR /app
 
-# Expose port (if needed)
-#EXPOSE 80
-
-# Run the app
 CMD ["python", "app.py"]

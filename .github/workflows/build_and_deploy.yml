@@ -1,0 +1,80 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "fao-maps-*"
+
+jobs:
+  scan_code :
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    steps:
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: 'fs'
+          hide-progress: false
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+
+  build_and_deploy:
+    runs-on: ubuntu-22.04
+    needs: scan_code
+    permissions:
+      id-token: write
+      contents: read
+      issues: write
+    environment: |-
+      ${{
+        startsWith(github.ref_name, 'fao-maps-prod-') && 'production' ||
+        startsWith(github.ref_name, 'fao-maps-review-') && 'review' ||
+        github.ref_name == 'main' && 'review'
+      }}
+    env:
+      TAG: ${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.ARTIFACT_REGISTRY }}/${{ vars.FUNCTION_NAME }}:${{ github.run_number }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.WORKLOAD_ID_PROVIDER }}
+          service_account: ${{ vars.SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Create env file
+        uses: un-fao/fao-ga-create-env-file@v2
+        with:
+          variables: ${{ toJson(vars) }}
+          secrets: ${{ toJson(secrets) }}
+
+      - name: Replace Variables
+        uses: un-fao/fao-ga-substitute-action@v2
+        with:
+          replace_undefined: true
+          env-files: .env
+          input-files: |
+            iac.yml
+            Dockerfile
+            route_dependencies.json
+
+      - name: Build
+        run: gcloud builds submit --tag ${{ env.TAG }}
+
+      - name: Deploy
+        run: |
+          gcloud run services replace iac.yml --platform=managed --region=${{ vars.REGION }}
+          gcloud run services set-iam-policy ${{ vars.FUNCTION_NAME }} policy.yml --region=${{ vars.REGION }}
+
+      - name: Create Issue
+        if: failure()
+        uses: un-fao/fao-ga-create-issue@v2

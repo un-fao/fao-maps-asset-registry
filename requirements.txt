@@ -26,7 +26,8 @@ diskcache==5.4.0
 entrypoints==0.4
 executing==1.2.0
 fastjsonschema==2.16.2
-Fiona==1.8.22
+# Updated Fiona to a more recent version to address wheel-building issues
+Fiona==1.9.4.post1
 Flask==2.2.2
 Flask-Cors==3.0.10
 Flask-JWT-Extended==4.4.4
@@ -40,6 +41,8 @@ geojson==3.0.1
 geopandas==0.12.1
 gitdb==4.0.12
 GitPython==3.1.44
+# Ensure compatibility with GDAL and other geospatial libraries
+GDAL==3.4.3
 greenlet==2.0.2
 idna==3.4
 importlib-metadata==5.1.0
@@ -90,7 +93,7 @@ prometheus-client==0.15.0
 prompt-toolkit==3.0.36
 psutil==5.9.4
 psycopg-binary==3.1.8
-psycopg2==2.9.5
+psycopg2-binary==2.9.5
 ptyprocess==0.7.0
 pure-eval==0.2.2
 pycodestyle==2.10.0

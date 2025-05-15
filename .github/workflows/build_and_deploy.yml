@@ -37,7 +37,8 @@ jobs:
         github.ref_name == 'master' && 'review'
       }}
     env:
-      TAG: ${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.ARTIFACT_REGISTRY }}/${{ vars.NAME }}:${{ github.run_number }}
+      TAG_USER: ${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.ARTIFACT_REGISTRY }}/${{ vars.NAME }}_user:${{ github.run_number }}
+      TAG_REGISTRY: ${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.ARTIFACT_REGISTRY }}/${{ vars.NAME }}:${{ github.run_number }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -64,7 +65,8 @@ jobs:
           env-files: .env
           input-files: |
             iac.yml
-            Dockerfile
+            user-registry/Dockerfile
+            asset-registry/Dockerfile
 
       # - name: cat
       #   run: |
@@ -83,6 +85,18 @@ jobs:
           # echo "### .env file is NOW PRESENT in the following list ###"
           # gcloud meta list-files-for-upload
           gcloud builds submit --tag ${{ env.TAG }}
+        
+            opa/Dockerfile
+            gateway/src/Dockerfile
+            gateway/src/app/service-account.json
+
+      - name: Build USER
+        working-directory: user-registry/src
+        run: gcloud builds submit --tag ${{ env.TAG_USER }} .
+
+      - name: Build REGISTRY
+        working-directory: asset-registry/src
+        run: gcloud builds submit --tag ${{ env.TAG_REGISTRY }} .
 
       - name: Deploy
         run: |

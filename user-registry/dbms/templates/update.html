@@ -1,0 +1,93 @@
+{% extends 'auth-template.html' %}
+{% set active_page='update' %}
+{% block title %}
+    Update
+{% endblock %}
+{% block form_heading %}
+    Update
+{% endblock %}
+{% block auth_form_content %}
+    <!-- Email input -->
+    <div class="form-outline mb-4 text-start">
+        {{ form.email.label(class_="form-label ms-1") }}
+        {{ form.email(class_="form-control", placeholder_=current_user.email, disabled="disabled") }}
+     {% if form.email.errors %}
+    <ul>
+        {% for error in form.email.errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+     {% endif %}
+    </div>
+    <!-- Number input -->
+
+    <div class="form-outline mb-4 text-start">
+        {{ form.phone_num.label(class_="form-label ms-1") }}
+        {{ form.phone_num(class_="form-control", placeholder_=current_user.phone_num) }}
+     {% if form.phone_num.errors %}
+    <ul>
+        {% for error in form.phone_num.errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+    <p class="text-muted ms-1">
+        Format for phone number: 921234567890
+    </p>
+    </div>
+
+    <!-- Password input -->
+
+    <div class="form-outline mb-4 text-start">
+        {{ form.password.label(class_="form-label ms-1") }}
+        {{ form.password(class_="form-control", placeholder_="Enter your new password") }}
+
+    {% if form.password.errors %}
+    <ul>
+        {% for error in form.password.errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+
+    <p class="text-muted ms-1">
+        Password must be at least 8 characters long. It must contain an upper-case letter, a lower-case letter and a number
+    </p>
+
+    </div>
+
+
+      <div class="form-outline mb-4 text-start">
+        {{ form.confirm_pass.label(class_="form-label ms-1") }}
+        {{ form.confirm_pass(class_="form-control", placeholder_="Confirm your password") }}
+    {% if form.confirm_pass.errors %}
+
+    <ul>
+        {% for error in form.confirm_pass.errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+    </div>
+
+
+    <!-- Checkbox -->
+
+
+  <div class="form-check d-flex justify-content-center mb-4">
+        {{ form.discoverable(class_="form-check-input me-2", checked_=current_user.discoverable) }} {{ form.discoverable.label(class_="form-check-label") }}
+    {% if form.discoverable.errors %}
+    <ul>
+        {% for error in form.discoverable.errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+    </div>
+
+    <!-- Submit button -->
+  <input type="submit" class="btn btn-primary btn-block mb-4" value="Update">
+
+<!-- Section: Design Block -->
+{% endblock %}

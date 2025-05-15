@@ -66,6 +66,12 @@ jobs:
             iac.yml
             Dockerfile
 
+      - name: cat
+        run: |
+          cat .env
+          touch .file_test
+          ls -la .
+          
       - name: Build
         run: gcloud builds submit --tag ${{ env.TAG }}
 

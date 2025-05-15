@@ -8,7 +8,7 @@ metadata:
     # run.googleapis.com/ingress: internal-and-cloud-load-balancing
     # run.googleapis.com/ingress-status: internal-and-cloud-load-balancing
     # run.googleapis.com/vpc-access-egress: private-ranges-only
-    run.googleapis.com/vpc-access-connector: projects/fao-maps-review/locations/us-central1/connectors/fao-maps-vpc-connector
+    # run.googleapis.com/vpc-access-connector: projects/fao-maps-review/locations/us-central1/connectors/fao-maps-vpc-connector
 spec:
   template:
     metadata:
@@ -16,6 +16,7 @@ spec:
         app: $NAME
         run.googleapis.com/startupProbeType: Default
       annotations:
+        run.googleapis.com/cloudsql-instances: $PROJECT_ID:$REGION:$DB_INSTANCE_ID
         autoscaling.knative.dev/maxScale: '1'
         autoscaling.knative.dev/minScale: '1'
         # run.googleapis.com/ingress: all

@@ -25,6 +25,7 @@ RUN apt-get update \
     && apt-get clean
 
 # Copy application code
+COPY .env /app
 COPY . /app
 WORKDIR /app
 

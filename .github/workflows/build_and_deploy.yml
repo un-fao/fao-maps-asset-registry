@@ -75,8 +75,13 @@ jobs:
       - name: Build
         run: |
           gcloud meta list-files-for-upload
+          echo "### list-files-for-upload ###"
+          echo "### .env file is not in the following list ###"
           gcloud config set gcloudignore/enabled false
+          echo "### gcloudignore/enabled false ###"
           gcloud meta list-files-for-upload
+          echo "### list-files-for-upload ###"
+          echo "### .env file is NOW PRESENT in the following list ###"
           gcloud builds submit --tag ${{ env.TAG }}
 
       - name: Deploy

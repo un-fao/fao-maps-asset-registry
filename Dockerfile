@@ -15,7 +15,7 @@ ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
 ENV C_INCLUDE_PATH=/usr/include/gdal
 
 # Install Python dependencies
-# COPY requirements.txt .
+COPY requirements.txt .
 # RUN pip install --no-cache-dir -r requirements.txt
 
 # Install system dependencies
@@ -25,7 +25,7 @@ RUN apt-get update \
     && apt-get clean
 
 # Copy application code
-COPY .env /app
+# COPY .env /app
 COPY . /app
 WORKDIR /app
 

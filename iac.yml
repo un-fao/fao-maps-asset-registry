@@ -8,12 +8,12 @@ metadata:
     # run.googleapis.com/ingress: internal-and-cloud-load-balancing
     # run.googleapis.com/ingress-status: internal-and-cloud-load-balancing
     # run.googleapis.com/vpc-access-egress: private-ranges-only
-    # run.googleapis.com/vpc-access-connector: projects/fao-maps-review/locations/us-central1/connectors/fao-maps-vpc-connector
+    run.googleapis.com/vpc-access-connector: projects/fao-maps-review/locations/us-central1/connectors/fao-maps-vpc-connector
 spec:
   template:
     metadata:
       labels:
-        app: $FUNCTION_NAME
+        app: $NAME
         run.googleapis.com/startupProbeType: Default
       annotations:
         autoscaling.knative.dev/maxScale: '1'

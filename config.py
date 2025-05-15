@@ -12,7 +12,7 @@ class Config(object):
     SECRET_KEY = os.getenv('SECRET_KEY')
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
     USER_REGISTRY_BASE_URL = os.getenv('USER_REGISTRY_BASE_URL')
-    APP_PORT = os.getenv('APP_PORT', 4000)
+    APP_PORT = int(os.getenv('APP_PORT', 4000))
 
 
 class ProductionConfig(Config):

@@ -27,20 +27,20 @@ spec:
       containers:
         - image: $TAG
           env:
-            - name: APP_SETTINGS
-              value: $APP_SETTINGS
-            - name: DATABASE_URL
-              value: $DATABASE_URL
-            - name: APP_PORT
-              value: "$APP_PORT"
-            - name: USER_REGISTRY_BASE_URL
-              value: $USER_REGISTRY_BASE_URL
-            - name: SECRET_KEY
-              value: $SECRET_KEY
+            # - name: APP_SETTINGS
+            #   value: $APP_SETTINGS
+            # - name: DATABASE_URL
+            #   value: $DATABASE_URL
+            # - name: APP_PORT
+            #   value: $APP_PORT
+            # - name: USER_REGISTRY_BASE_URL
+            #   value: $USER_REGISTRY_BASE_URL
+            # - name: SECRET_KEY
+            #   value: $SECRET_KEY
           ports:
             #- name: h2c
             - name: http1
-              containerPort: $APP_PORT
+              containerPort: 80
           resources:
             limits:
               cpu: 1000m

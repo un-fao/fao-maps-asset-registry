@@ -66,22 +66,22 @@ jobs:
             iac.yml
             Dockerfile
 
-      - name: cat
-        run: |
-          cat .env
-          touch .file_test
-          ls -la .
+      # - name: cat
+      #   run: |
+      #     cat .env
+      #     touch .file_test
+      #     ls -la .
 
       - name: Build
         run: |
-          gcloud meta list-files-for-upload
-          echo "### list-files-for-upload ###"
-          echo "### .env file is not in the following list ###"
-          gcloud config set gcloudignore/enabled false
+          # echo "### list-files-for-upload ###"
+          # echo "### .env file is not in the following list ###"
+          # gcloud meta list-files-for-upload
           echo "### gcloudignore/enabled false ###"
-          gcloud meta list-files-for-upload
-          echo "### list-files-for-upload ###"
-          echo "### .env file is NOW PRESENT in the following list ###"
+          gcloud config set gcloudignore/enabled false
+          # echo "### list-files-for-upload ###"
+          # echo "### .env file is NOW PRESENT in the following list ###"
+          # gcloud meta list-files-for-upload
           gcloud builds submit --tag ${{ env.TAG }}
 
       - name: Deploy

@@ -1,7 +1,7 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: $FUNCTION_NAME
+  name: $NAME
   labels:
     cloud.googleapis.com/location: $REGION
   annotations:

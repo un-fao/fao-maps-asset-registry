@@ -3,7 +3,7 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - main
+      - master
     tags:
       - "fao-maps-*"
 
@@ -34,7 +34,7 @@ jobs:
       ${{
         startsWith(github.ref_name, 'fao-maps-prod-') && 'production' ||
         startsWith(github.ref_name, 'fao-maps-review-') && 'review' ||
-        github.ref_name == 'main' && 'review'
+        github.ref_name == 'master' && 'review'
       }}
     env:
       TAG: ${{ vars.REGION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.ARTIFACT_REGISTRY }}/${{ vars.NAME }}:${{ github.run_number }}
